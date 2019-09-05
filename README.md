@@ -1,5 +1,7 @@
 # Code Challenge: Dual-Listbox
 
+![mockup](mockup.jpg)
+
 ## Objective
 
 Create a tool, using Angular, which allows an HR manager to move employees from one list to another. Each list of employees features different job categories.
