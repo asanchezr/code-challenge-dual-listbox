@@ -1,0 +1,12 @@
+<div class="container">
+  <div class="row custom-wrapper">
+    <div class="col-md-12">
+      <input type="text" class="form-control" placeholder="Filter...">
+      <select multiple class="form-control" size="8">
+        <optgroup *ngFor="let group of getData(registrationForm.value.filter)" label="{{group.name}}">
+          <option *ngFor="let city of group.options" [ngValue]="city" (change)="changeCity($event)">{{city.name}}</option>
+        </optgroup>
+      </select>
+    </div>
+  </div>
+</div>
