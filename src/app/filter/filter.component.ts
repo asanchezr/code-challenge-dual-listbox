@@ -1,15 +1,19 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 
 @Component({
   selector: 'app-filter',
-  templateUrl: './filter.component.html',
-  styleUrls: ['./filter.component.scss']
+  styleUrls: ['./filter.component.scss'],
+  template: `
+    <input type="text" class="form-control" [value]="searchTerm" placeholder="{{placeholder}}" (input)="onChange($event)">
+  `
 })
 export class FilterComponent implements OnInit {
 
+  @Input() placeholder = 'Filter...';
+  @Input() searchTerm = '';
+  @Output() filterChange = new EventEmitter<string>();
+
   constructor() { }
-
-  ngOnInit() {
-  }
-
+  ngOnInit() { }
+  onChange(e) { this.filterChange.emit(e.target.value); }
 }

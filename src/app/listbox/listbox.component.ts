@@ -1,18 +1,17 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnChanges, Input, Output, EventEmitter, SimpleChanges } from '@angular/core';
+import { FormControl } from '@angular/forms';
+import { NameAndId } from '../interfaces';
 
-interface NameAndId {
-  id: number;
-  name: string;
-}
-
-const defaultFilter = (option: NameAndId, searchTerm: string) => option.name.toLowerCase().includes(searchTerm.toLowerCase().trim());
+const defaultFilter = (option: NameAndId, searchTerm: string) => {
+  return option.name.toLowerCase().includes(searchTerm.toLowerCase().trim());
+};
 
 @Component({
   selector: 'app-listbox',
   templateUrl: './listbox.component.html',
   styleUrls: ['./listbox.component.scss']
 })
-export class ListboxComponent implements OnInit {
+export class ListboxComponent implements OnInit, OnChanges {
 
   // data source
   dataSource = [
@@ -34,12 +33,31 @@ export class ListboxComponent implements OnInit {
     },
   ];
 
+  @Input() searchTerm = '';
+  @Input() canFilter = true;
+
+  @Output() filterChange = new EventEmitter<string>();
+
+  filterControl = new FormControl('');
+  pickListControl = new FormControl([]);
+
   constructor() { }
 
-  ngOnInit() {
+  ngOnInit() { }
+
+  ngOnChanges(changes: SimpleChanges) {
+    const { searchTerm } = changes;
+    if (searchTerm) {
+      this.filterControl.setValue(searchTerm.currentValue);
+    }
   }
 
   getData(searchTerm: string = '') {
     return this.dataSource.map(e => ({ ...e, options: e.options.filter(o => defaultFilter(o, searchTerm)) }));
+  }
+
+  onFilterChange(value: string) {
+    this.filterChange.emit(value);
+    this.filterControl.setValue(value);
   }
 }

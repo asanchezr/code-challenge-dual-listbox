@@ -1,1 +1,28 @@
-<app-listbox></app-listbox>
+<div class="row">
+  <div class="col-md-5 col-lg-5 col-sm-12">
+    <app-listbox [canFilter]="true"></app-listbox>
+  </div>
+
+  <div class="col-md-2 col-lg-2 col-sm-12 center-block text-center mt-md-5">
+    <button type="button"
+      class="btn btn-outline-primary col-md-8 col-md-offset-2 mb-3">
+      <i class="fas fa-angle-double-right"></i>
+    </button>
+    <button type="button"
+      class="btn btn-outline-primary col-md-8 col-md-offset-2 mb-3">
+      <i class="fas fa-angle-right"></i>
+    </button>
+    <button type="button"
+      class="btn btn-outline-primary col-md-8 col-md-offset-2 mb-3">
+      <i class="fas fa-angle-left"></i>
+    </button>
+    <button type="button"
+      class="btn btn-outline-primary col-md-8 col-md-offset-2 mb-3">
+      <i class="fas fa-angle-double-left"></i>
+    </button>
+  </div>
+
+  <div class="col-md-5 col-lg-5 col-sm-12">
+    <app-listbox [canFilter]="true"></app-listbox>
+  </div>
+</div>
