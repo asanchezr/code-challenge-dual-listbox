@@ -1,4 +1,6 @@
 import { Component } from '@angular/core';
+import { Category } from './interfaces.js';
+import employees from '../assets/data/employees.json';
 
 @Component({
   selector: 'app-root',
@@ -6,5 +8,5 @@ import { Component } from '@angular/core';
   styleUrls: ['./app.component.scss']
 })
 export class AppComponent {
-  title = 'dual-listbox';
+  employeesList: Category[] = employees.data;
 }

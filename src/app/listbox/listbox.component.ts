@@ -1,8 +1,8 @@
 import { Component, OnInit, OnChanges, Input, Output, EventEmitter, SimpleChanges } from '@angular/core';
 import { FormControl } from '@angular/forms';
-import { NameAndId } from '../interfaces';
+import { Employee, Category } from '../interfaces';
 
-const defaultFilter = (option: NameAndId, searchTerm: string) => {
+const defaultFilter = (option: Employee, searchTerm: string) => {
   return option.name.toLowerCase().includes(searchTerm.toLowerCase().trim());
 };
 
@@ -13,47 +13,35 @@ const defaultFilter = (option: NameAndId, searchTerm: string) => {
 })
 export class ListboxComponent implements OnInit, OnChanges {
 
-  // data source
-  dataSource = [
-    {
-      id: 1,
-      name: 'Group 1',
-      options: [
-        { id: 100, name: 'Alfred Young' },
-        { id: 101, name: 'Seasick Jean' },
-      ]
-    },
-    {
-      id: 2,
-      name: 'Group 2',
-      options: [
-        { id: 102, name: 'Josh Donaldson' },
-        { id: 103, name: 'Mickey Mantle' },
-      ]
-    },
-  ];
-
-  @Input() searchTerm = '';
+  @Input() source: Category[] = [];
   @Input() canFilter = true;
-
+  @Input() filter = '';
   @Output() filterChange = new EventEmitter<string>();
+  @Output() selectionChange = new EventEmitter<number[]>();
 
   filterControl = new FormControl('');
   pickListControl = new FormControl([]);
 
   constructor() { }
 
-  ngOnInit() { }
+  ngOnInit() {
+    this.pickListControl
+      .valueChanges
+      .subscribe((items: number[]) => this.selectionChange.emit(items));
+  }
 
   ngOnChanges(changes: SimpleChanges) {
-    const { searchTerm } = changes;
-    if (searchTerm) {
-      this.filterControl.setValue(searchTerm.currentValue);
+    const { filter, source } = changes;
+    if (filter) {
+      this.filterControl.setValue(filter.currentValue as string);
+    }
+    if (source) {
+      this.pickListControl.setValue([]);
     }
   }
 
   getData(searchTerm: string = '') {
-    return this.dataSource.map(e => ({ ...e, options: e.options.filter(o => defaultFilter(o, searchTerm)) }));
+    return this.source.map(e => ({ ...e, options: e.options.filter(o => defaultFilter(o, searchTerm)) }));
   }
 
   onFilterChange(value: string) {
