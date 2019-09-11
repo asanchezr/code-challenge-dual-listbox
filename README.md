@@ -2,7 +2,7 @@
 
 ![mockup](mockup.jpg)
 
-## Objective
+## The Problem
 
 Create a tool, using Angular, which allows an HR manager to move employees from one list to another. Each list of employees features different job categories.
 
@@ -16,9 +16,14 @@ The code should:
 - Be themed roughly to match the accompanying mockup/screenshots.
 - Include a filter feature for each list.
 
-## Development server
+## Running My App
 
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The app will automatically reload if you change any of the source files.
+To run the app, you'll need Node.js v8 (or later).
+
+Clone the repository, and run `npm install` from the project root to install the needed dependencies. Then from the project
+root, you can run `npm start` to launch a dev server. Navigate to `http://localhost:4200/`. 
+
+The app will automatically reload if you change any of the source files.
 
 ## Code scaffolding
 
@@ -26,7 +31,7 @@ Run `ng generate component component-name` to generate a new component. You can 
 
 ## Build
 
-Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory. Use the `--prod` flag for a production build.
+Run `npm run build` to build the project. The build artifacts will be stored in the `dist/` directory. Use the `--prod` flag for a production build.
 
 ## Further help
 
