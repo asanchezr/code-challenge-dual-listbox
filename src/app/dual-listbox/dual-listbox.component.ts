@@ -1,6 +1,11 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { Category, Employee, FilterFn } from '../interfaces';
-import { filter } from 'minimatch';
+
+interface ListState {
+  items: Category[];
+  filter: string;
+  picklistSelection: number[];
+}
 
 @Component({
   selector: 'app-dual-listbox',
@@ -10,49 +15,52 @@ import { filter } from 'minimatch';
 export class DualListboxComponent implements OnInit {
 
   @Input() source: Category[] = [];
-  @Input() selectedValues: number[] = [];
+  @Input() selected: number[] = [];
   @Output() selectedChange = new EventEmitter<Employee[]>();
 
   // internal state
-  availableItems: Category[] = [];
-  selectedItems: Category[] = [];
+  left: ListState = {
+    items: [],
+    filter: '',
+    picklistSelection: []
+  };
 
-  availableFilter = '';
-  selectedFilter = '';
-
-  availablePicklistSelection: number[] = [];
-  selectedPicklistSelection: number[] = [];
+  right: ListState = {
+    items: [],
+    filter: '',
+    picklistSelection: []
+  };
 
   constructor() { }
 
   ngOnInit() {
-    this.availableItems = this.filterAvailable(this.source);
-    this.selectedItems = this.filterSelected(this.source);
+    this.left.items = this.filterAvailable(this.source);
+    this.right.items = this.filterSelected(this.source);
   }
 
   onLeftSelectionChange(selectedValues: number[]) {
-    this.availablePicklistSelection = selectedValues;
+    this.left.picklistSelection = selectedValues;
   }
 
   onRightSelectionChange(selectedValues: number[]) {
-    this.selectedPicklistSelection = selectedValues;
+    this.right.picklistSelection = selectedValues;
   }
 
   moveAllToRight() {
-    if (!this.availableItems.length) {
+    if (!this.left.items.length) {
       return;
     }
 
-    const previouslySelected = this.selectedValues;
+    const previouslySelected = this.selected;
     const selected = [
       ...previouslySelected,
-      ...this.getFlatOptions(this.availableItems)
+      ...this.getFlatOptions(this.left.items)
     ];
     this.onChange(selected);
   }
 
   moveAllToLeft() {
-    if (!this.selectedItems.length) {
+    if (!this.right.items.length) {
       return;
     }
 
@@ -61,41 +69,49 @@ export class DualListboxComponent implements OnInit {
   }
 
   moveSelectedToRight() {
-    if (!this.availablePicklistSelection.length) {
+    if (!this.left.picklistSelection.length) {
       return;
     }
 
-    const previouslySelected = this.selectedValues;
+    const previouslySelected = this.selected;
     const selected = [
       ...previouslySelected,
-      ...this.availablePicklistSelection
+      ...this.left.picklistSelection
     ];
     this.onChange(selected);
   }
 
   moveSelectedToLeft() {
-    // TODO
+    if (!this.right.picklistSelection.length) {
+      return;
+    }
+
+    const previouslySelected = this.selected;
+    const selected = previouslySelected.filter(value => this.right.picklistSelection.indexOf(value) < 0);
+    this.onChange(selected);
   }
 
   private onChange(selected: number[]) {
-    this.selectedValues = [...selected];
+    this.selected = [...selected];
 
     // update listboxes
-    this.availableItems = this.filterAvailable(this.source);
-    this.selectedItems = this.filterSelected(this.source);
+    this.left.items = this.filterAvailable(this.source);
+    this.right.items = this.filterSelected(this.source);
 
-    // TODO: hydrate selected-ids into objects
-    this.selectedChange.emit(null);
+    // Reconstruct selected-ids into objects
+    const all = this.source.reduce((array, optgroup) => [...array, ...optgroup.options], [] as Employee[]);
+    const selectedOptions = all.filter(option => selected.includes(option.id));
+    this.selectedChange.emit(selectedOptions);
   }
 
   private filterAvailable(options: Category[]): Category[] {
     // The default is to only show available options when they are not selected
-    const filterer: FilterFn = (option: Employee) => this.selectedValues.indexOf(option.id) < 0;
+    const filterer: FilterFn = (option: Employee) => this.selected.indexOf(option.id) < 0;
     return this.filterOptions(options, filterer);
   }
 
   private filterSelected(options: Category[]): Category[] {
-    const filterer: FilterFn = (option: Employee) => this.selectedValues.indexOf(option.id) >= 0;
+    const filterer: FilterFn = (option: Employee) => this.selected.indexOf(option.id) >= 0;
     return this.filterOptions(options, filterer);
   }
 
@@ -112,8 +128,7 @@ export class DualListboxComponent implements OnInit {
 
   private getFlatOptions(groups: Category[]): number[] {
     // Flatten the optgroups into an array of employees (sub-options)
-    const initialValue: number[] = [];
-    const flattened = groups.reduce((array, optgroup) => [...array, ...this.getFlatValues(optgroup.options)], initialValue);
+    const flattened = groups.reduce((array, optgroup) => [...array, ...this.getFlatValues(optgroup.options)], [] as number[]);
     return flattened;
   }
 

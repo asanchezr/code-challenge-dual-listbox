@@ -10,7 +10,14 @@
 </nav>
 
 <div class="container">
-  <app-dual-listbox [source]="employeesList"></app-dual-listbox>
+  <app-dual-listbox [source]="employeesList" (selectedChange)="selectedEmployees = $event"></app-dual-listbox>
+  <!-- DEBUG -->
+  <div class="col pb-4">
+    Selected Employees:
+    <pre>
+{{ selectedEmployees | json }}
+    </pre>
+  </div>
 </div>
 
 <nav class="navbar navbar-dark bg-dark mt-5 fixed-bottom">
