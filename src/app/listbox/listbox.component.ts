@@ -47,5 +47,6 @@ export class ListboxComponent implements OnInit, OnChanges {
   onFilterChange(value: string) {
     this.filterChange.emit(value);
     this.filterControl.setValue(value);
+    this.pickListControl.setValue([]);
   }
 }

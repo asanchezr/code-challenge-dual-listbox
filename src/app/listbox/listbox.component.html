@@ -1,18 +1,11 @@
-<div class="container">
-  <div class="row custom-wrapper">
-    <div class="col-md-12">
-      <app-filter *ngIf="canFilter" [searchTerm]="filterControl.value" (filterChange)="onFilterChange($event)"></app-filter>
+<div class="row custom-wrapper">
+  <div class="col-md-12">
+    <app-filter *ngIf="canFilter" [searchTerm]="filterControl.value" (filterChange)="onFilterChange($event)"></app-filter>
 
-      <select multiple class="form-control" size="8" [formControl]="pickListControl">
-        <optgroup *ngFor="let group of getData(filterControl.value)" label="{{group.name}}">
-          <option *ngFor="let item of group.options" [value]="item?.id">{{item.name}}</option>
-        </optgroup>
-      </select>
-    </div>
+    <select multiple class="form-control" size="8" [formControl]="pickListControl">
+      <optgroup *ngFor="let group of getData(filterControl.value)" label="{{group.name}}">
+        <option *ngFor="let item of group.options" [value]="item?.id">{{item.name}}</option>
+      </optgroup>
+    </select>
   </div>
-  <!-- DEBUG -->
-  <pre>
-    Filter value: {{ filterControl.value | json }}
-    Selected items: {{ pickListControl.value | json }}
-  </pre>
 </div>
