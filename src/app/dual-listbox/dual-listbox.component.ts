@@ -7,6 +7,12 @@ interface ListState {
   picklistSelection: number[];
 }
 
+const defaultSort = (a: Employee, b: Employee) => {
+  if (a.name < b.name) { return -1; }
+  if (a.name > b.name) { return 1; }
+  return 0;
+};
+
 @Component({
   selector: 'app-dual-listbox',
   templateUrl: './dual-listbox.component.html',
@@ -14,7 +20,19 @@ interface ListState {
 })
 export class DualListboxComponent implements OnInit {
 
-  @Input() source: Category[] = [];
+  private source: Category[] = [];
+
+  @Input('source') set sourceValues(values: Category[]) {
+    // ensure values are sorted alphabetically
+    this.source = values.map(optgroup => {
+      const newCategory: Category = {
+        ...optgroup,
+        options: optgroup.options.sort(defaultSort)
+      };
+      return newCategory;
+    });
+  };
+
   @Input() selected: number[] = [];
   @Output() selectedChange = new EventEmitter<Employee[]>();
 
