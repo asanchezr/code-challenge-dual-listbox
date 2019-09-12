@@ -18,7 +18,7 @@ The code should:
 
 ## Running My App
 
-To run the app, you'll need Node.js v8 (or later).
+To run the app, you'll need `Node.js` version 10 (or later).
 
 Clone the repository, and run `npm install` from the project root to install the needed dependencies. Then from the project
 root, you can run `npm start` to launch a dev server. Navigate to `http://localhost:4200/`.
