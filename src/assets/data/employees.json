@@ -1,32 +1,191 @@
 {
-  "data": [
+  "categories": [
     {
       "id": 1,
-      "name": "Group 1",
-      "options": [
+      "name": "Communication Consultants",
+      "employees": [
         {
-          "id": 101,
-          "name": "Seasick Jean"
+          "id": 1,
+          "name": "Chrissy Bernard"
         },
         {
-          "id": 100,
-          "name": "Alfred Young"
+          "id": 2,
+          "name": "Peter Cook"
+        },
+        {
+          "id": 3,
+          "name": "Richie Richards"
+        },
+        {
+          "id": 4,
+          "name": "Kathy Taylor"
+        },
+        {
+          "id": 5,
+          "name": "Stevie Nickx"
+        },
+        {
+          "id": 6,
+          "name": "Simon Fraizer"
+        },
+        {
+          "id": 7,
+          "name": "Timmy Mallet"
         }
       ]
     },
     {
       "id": 2,
-      "name": "Group 2",
-      "options": [
+      "name": "Graphic Designers",
+      "employees": [
         {
-          "id": 102,
-          "name": "Josh Donaldson"
+          "id": 8,
+          "name": "Brandon Walsh"
         },
         {
-          "id": 103,
-          "name": "Mickey Mantle"
+          "id": 9,
+          "name": "Bradshaw Shepard"
+        },
+        {
+          "id": 10,
+          "name": "Cuthburt Clements"
+        },
+        {
+          "id": 11,
+          "name": "Michael Jordon"
+        },
+        {
+          "id": 12,
+          "name": "Nancy Smith"
+        },
+        {
+          "id": 13,
+          "name": "Taylor Beech"
+        }
+      ]
+    },
+    {
+      "id": 3,
+      "name": "Web Designers",
+      "employees": [
+        {
+          "id": 14,
+          "name": "Brandon Shaw"
+        },
+        {
+          "id": 15,
+          "name": "Michael Murphy"
+        },
+        {
+          "id": 16,
+          "name": "Newet Legg"
+        },
+        {
+          "id": 17,
+          "name": "Zack Zebra"
+        },
+        {
+          "id": 18,
+          "name": "Zanda Zeebee"
+        }
+      ]
+    },
+    {
+      "id": 4,
+      "name": "Web Developers",
+      "employees": [
+        {
+          "id": 19,
+          "name": "Andrew Taylor"
+        },
+        {
+          "id": 20,
+          "name": "Duncan Dee"
+        },
+        {
+          "id": 21,
+          "name": "Grant Alan"
+        },
+        {
+          "id": 22,
+          "name": "Freddy Kru"
+        },
+        {
+          "id": 23,
+          "name": "Philip Windsor"
+        }
+      ]
+    },
+    {
+      "id": 5,
+      "name": "Quality Assessment",
+      "employees": [
+        {
+          "id": 24,
+          "name": "Henry Luccet"
+        },
+        {
+          "id": 25,
+          "name": "Heidi Hy"
+        },
+        {
+          "id": 26,
+          "name": "Janet Crossby"
+        },
+        {
+          "id": 27,
+          "name": "Lucy Lu"
+        }
+      ]
+    },
+    {
+      "id": 6,
+      "name": "Quality Control",
+      "employees": [
+        {
+          "id": 28,
+          "name": "Kate Pear"
+        },
+        {
+          "id": 29,
+          "name": "Lemony Snicket"
+        },
+        {
+          "id": 30,
+          "name": "Qunicy qunice"
+        },
+        {
+          "id": 31,
+          "name": "Robyn Red"
+        }
+      ]
+    },
+    {
+      "id": 7,
+      "name": "Project Managers",
+      "employees": [
+        {
+          "id": 32,
+          "name": "Susan Smith"
+        },
+        {
+          "id": 33,
+          "name": "Simon Jones"
+        },
+        {
+          "id": 34,
+          "name": "Tina Rich"
+        },
+        {
+          "id": 35,
+          "name": "Vanessa Groans"
+        },
+        {
+          "id": 36,
+          "name": "Paula Owl"
         }
       ]
     }
-  ]
+  ],
+  "inactive": []
 }

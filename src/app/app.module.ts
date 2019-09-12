@@ -6,13 +6,15 @@ import { AppComponent } from './app.component';
 import { DualListboxComponent } from './dual-listbox/dual-listbox.component';
 import { ListboxComponent } from './listbox/listbox.component';
 import { FilterComponent } from './filter/filter.component';
+import { ArrayFilterPipe } from './utils/array-filter.pipe';
 
 @NgModule({
   declarations: [
     AppComponent,
     DualListboxComponent,
     ListboxComponent,
-    FilterComponent
+    FilterComponent,
+    ArrayFilterPipe
   ],
   imports: [
     BrowserModule,

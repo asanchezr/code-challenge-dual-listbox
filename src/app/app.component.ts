@@ -10,6 +10,6 @@ import employees from '../assets/data/employees.json';
   styleUrls: ['./app.component.scss']
 })
 export class AppComponent {
-  employeesList: Category[] = employees.data;
-  selectedEmployees: Employee[] = [];
+  employeesList: Category[] = employees.categories;
+  inactiveEmployees: Employee[] = [];
 }

@@ -10,12 +10,12 @@
 </nav>
 
 <div class="container">
-  <app-dual-listbox [source]="employeesList" (selectedChange)="selectedEmployees = $event"></app-dual-listbox>
+  <app-dual-listbox [source]="employeesList" (selectedChange)="inactiveEmployees = $event"></app-dual-listbox>
   <!-- DEBUG -->
   <div class="col pb-4">
-    Selected Employees:
+    <h5 class="pt-3 border-top border-info">Inactive Employees:</h5>
     <pre>
-{{ selectedEmployees | json }}
+{{ inactiveEmployees | json }}
     </pre>
   </div>
 </div>

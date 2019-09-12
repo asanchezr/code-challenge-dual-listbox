@@ -1,9 +1,9 @@
 <div class="row custom-wrapper">
   <div class="col-md-12">
     <app-filter *ngIf="canFilter" [searchTerm]="filterControl.value" (filterChange)="onFilterChange($event)"></app-filter>
-    <select multiple class="form-control" size="8" [formControl]="pickListControl">
-      <optgroup *ngFor="let group of source" label="{{group.name}}">
-        <option *ngFor="let item of group.options" [value]="item?.id">{{item.name}}</option>
+    <select multiple class="form-control" size="10" [formControl]="pickListControl">
+      <optgroup *ngFor="let category of source" label="{{category.name}}">
+        <option *ngFor="let employee of category.employees" [value]="employee?.id">{{employee.name}}</option>
       </optgroup>
     </select>
   </div>

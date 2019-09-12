@@ -1,15 +1,13 @@
 
-export interface HasId {
+export interface Employee {
   id: number;
-}
-
-export interface Employee extends HasId {
   name: string;
 }
 
-export interface Category extends HasId {
+export interface Category {
+  id: number;
   name: string;
-  options: Employee[];
+  employees: Employee[];
 }
 
 export type FilterFn = (o: Employee) => boolean;

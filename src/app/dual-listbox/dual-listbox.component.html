@@ -1,6 +1,7 @@
 <div class="row">
   <div class="col-md-5 col-lg-5 col-sm-12">
-    <app-listbox [canFilter]="true" [source]="left.items" (selectionChange)="onSelectionChange(left, $event)" (filterChange)="onLeftFilterChange($event)"></app-listbox>
+    <label class="h4 pl-4">Active Employees - {{ count(left.items) }}</label>
+    <app-listbox [canFilter]="true" [source]="left.items | arrayFilter: left.filter" (selectionChange)="onSelectionChange(left, $event)" (filterChange)="left.filter = $event"></app-listbox>
   </div>
 
   <div class="col-md-2 col-lg-2 col-sm-12 center-block text-center mt-md-5">
@@ -27,6 +28,7 @@
   </div>
 
   <div class="col-md-5 col-lg-5 col-sm-12">
-    <app-listbox [canFilter]="true" [source]="right.items" (selectionChange)="onSelectionChange(right, $event)" (filterChange)="onRightFilterChange($event)"></app-listbox>
+    <label class="h4 pl-4">Inactive Employees - {{ count(right.items) }}</label>
+    <app-listbox [canFilter]="true" [source]="right.items | arrayFilter: right.filter" (selectionChange)="onSelectionChange(right, $event)" (filterChange)="right.filter = $event"></app-listbox>
   </div>
 </div>

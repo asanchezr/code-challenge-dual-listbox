@@ -13,14 +13,6 @@ const defaultSort = (a: Employee, b: Employee) => {
   return 0;
 };
 
-const defaultFilter = (option: Employee, searchTerm: string) => {
-  if (searchTerm === '') {
-    return true;
-  }
-
-  return option.name.toLowerCase().includes(searchTerm.toLowerCase().trim());
-};
-
 @Component({
   selector: 'app-dual-listbox',
   templateUrl: './dual-listbox.component.html',
@@ -35,7 +27,7 @@ export class DualListboxComponent implements OnInit {
     this.source = values.map(optgroup => {
       const newCategory: Category = {
         ...optgroup,
-        options: optgroup.options.sort(defaultSort)
+        employees: optgroup.employees.sort(defaultSort)
       };
       return newCategory;
     });
@@ -59,6 +51,11 @@ export class DualListboxComponent implements OnInit {
 
   constructor() { }
 
+  // Counts all amployees wihtin a picklist/listbox
+  count(list: Category[]): number {
+    return (this.getFlatOptions(list) || []).length;
+  }
+
   ngOnInit() {
     this.left.items = this.filterAvailable(this.source, this.left.filter);
     this.right.items = this.filterSelected(this.source, this.right.filter);
@@ -66,16 +63,6 @@ export class DualListboxComponent implements OnInit {
 
   onSelectionChange(list: ListState, selectedValues: number[]) {
     list.picklistSelection = selectedValues;
-  }
-
-  onLeftFilterChange(value: string) {
-    this.left.filter = value;
-    this.left.items = this.filterAvailable(this.source, this.left.filter);
-  }
-
-  onRightFilterChange(value: string) {
-    this.right.filter = value;
-    this.right.items = this.filterSelected(this.source, this.right.filter);
   }
 
   moveAllToRight() {
@@ -133,7 +120,7 @@ export class DualListboxComponent implements OnInit {
     this.right.items = this.filterSelected(this.source, this.right.filter);
 
     // Reconstruct selected-ids into objects
-    const all = this.source.reduce((array, optgroup) => [...array, ...optgroup.options], [] as Employee[]);
+    const all = this.source.reduce((array, optgroup) => [...array, ...optgroup.employees], [] as Employee[]);
     const selectedOptions = all.filter(option => selected.includes(option.id));
     this.selectedChange.emit(selectedOptions);
   }
@@ -141,19 +128,13 @@ export class DualListboxComponent implements OnInit {
   private filterAvailable(options: Category[], filterValue: string = ''): Category[] {
     // The default is to only show available options when they are not selected
     // AND also make sure they match the typed in filter value (if any)
-    const filterer: FilterFn = (option: Employee) => (
-      this.selected.indexOf(option.id) < 0 &&
-      defaultFilter(option, filterValue)
-    );
+    const filterer: FilterFn = (option: Employee) => this.selected.indexOf(option.id) < 0;
 
     return this.filterOptions(options, filterer);
   }
 
   private filterSelected(options: Category[], filterValue: string = ''): Category[] {
-    const filterer: FilterFn = (option: Employee) => (
-      this.selected.indexOf(option.id) >= 0 &&
-      defaultFilter(option, filterValue)
-    );
+    const filterer: FilterFn = (option: Employee) => this.selected.indexOf(option.id) >= 0;
 
     return this.filterOptions(options, filterer);
   }
@@ -161,10 +142,10 @@ export class DualListboxComponent implements OnInit {
   private filterOptions(groups: Category[], filterer: FilterFn): Category[] {
     // Filter any children of parent optgroups
     const filtered = groups.map(optgroup => {
-      const subFiltered = (optgroup.options || []).filter(subOption => filterer(subOption));
+      const subFiltered = (optgroup.employees || []).filter(subOption => filterer(subOption));
       const newGroup: Category = {
         ...optgroup,
-        options: subFiltered
+        employees: subFiltered
       };
       return newGroup;
     });
@@ -173,13 +154,16 @@ export class DualListboxComponent implements OnInit {
   }
 
   private getFlatOptions(groups: Category[]): number[] {
-    // Flatten the optgroups into an array of employees (sub-options)
-    const flattened = groups.reduce((array, optgroup) => [...array, ...this.getFlatValues(optgroup.options)], [] as number[]);
+    // Flatten the groups into an array of employees (sub-options)
+    const flattened = (groups || []).reduce(
+      (array, optgroup) => [...array, ...this.getFlatValues(optgroup.employees)],
+      [] as number[]
+    );
     return flattened;
   }
 
   // get values (IDs) from selected items
-  private getFlatValues(options: Employee[]): number[] {
-    return (options || []).map(o => o.id);
+  private getFlatValues(employees: Employee[]): number[] {
+    return (employees || []).map(e => e.id);
   }
 }
