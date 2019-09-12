@@ -1,11 +1,6 @@
 import { Component, OnInit, OnChanges, Input, Output, EventEmitter, SimpleChanges } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { Employee, Category } from '../interfaces';
-
-const defaultFilter = (option: Employee, searchTerm: string) => {
-  return option.name.toLowerCase().includes(searchTerm.toLowerCase().trim());
-};
-
 @Component({
   selector: 'app-listbox',
   templateUrl: './listbox.component.html',
@@ -32,21 +27,17 @@ export class ListboxComponent implements OnInit, OnChanges {
 
   ngOnChanges(changes: SimpleChanges) {
     const { filter, source } = changes;
-    if (filter) {
-      this.filterControl.setValue(filter.currentValue as string);
-    }
     if (source) {
       this.pickListControl.setValue([]);
     }
-  }
-
-  getData(searchTerm: string = '') {
-    return this.source.map(e => ({ ...e, options: e.options.filter(o => defaultFilter(o, searchTerm)) }));
+    if (filter) {
+      this.onFilterChange(filter.currentValue as string);
+    }
   }
 
   onFilterChange(value: string) {
-    this.filterChange.emit(value);
     this.filterControl.setValue(value);
     this.pickListControl.setValue([]);
+    this.filterChange.emit(value);
   }
 }

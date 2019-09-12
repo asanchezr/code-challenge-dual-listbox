@@ -13,6 +13,14 @@ const defaultSort = (a: Employee, b: Employee) => {
   return 0;
 };
 
+const defaultFilter = (option: Employee, searchTerm: string) => {
+  if (searchTerm === '') {
+    return true;
+  }
+
+  return option.name.toLowerCase().includes(searchTerm.toLowerCase().trim());
+};
+
 @Component({
   selector: 'app-dual-listbox',
   templateUrl: './dual-listbox.component.html',
@@ -31,7 +39,7 @@ export class DualListboxComponent implements OnInit {
       };
       return newCategory;
     });
-  };
+  }
 
   @Input() selected: number[] = [];
   @Output() selectedChange = new EventEmitter<Employee[]>();
@@ -52,16 +60,22 @@ export class DualListboxComponent implements OnInit {
   constructor() { }
 
   ngOnInit() {
-    this.left.items = this.filterAvailable(this.source);
-    this.right.items = this.filterSelected(this.source);
+    this.left.items = this.filterAvailable(this.source, this.left.filter);
+    this.right.items = this.filterSelected(this.source, this.right.filter);
   }
 
-  onLeftSelectionChange(selectedValues: number[]) {
-    this.left.picklistSelection = selectedValues;
+  onSelectionChange(list: ListState, selectedValues: number[]) {
+    list.picklistSelection = selectedValues;
   }
 
-  onRightSelectionChange(selectedValues: number[]) {
-    this.right.picklistSelection = selectedValues;
+  onLeftFilterChange(value: string) {
+    this.left.filter = value;
+    this.left.items = this.filterAvailable(this.source, this.left.filter);
+  }
+
+  onRightFilterChange(value: string) {
+    this.right.filter = value;
+    this.right.items = this.filterSelected(this.source, this.right.filter);
   }
 
   moveAllToRight() {
@@ -69,10 +83,12 @@ export class DualListboxComponent implements OnInit {
       return;
     }
 
+    // ignore the search filter when moving all items
+    const available = this.filterAvailable(this.source);
     const previouslySelected = this.selected;
     const selected = [
       ...previouslySelected,
-      ...this.getFlatOptions(this.left.items)
+      ...this.getFlatOptions(available)
     ];
     this.onChange(selected);
   }
@@ -113,8 +129,8 @@ export class DualListboxComponent implements OnInit {
     this.selected = [...selected];
 
     // update listboxes
-    this.left.items = this.filterAvailable(this.source);
-    this.right.items = this.filterSelected(this.source);
+    this.left.items = this.filterAvailable(this.source, this.left.filter);
+    this.right.items = this.filterSelected(this.source, this.right.filter);
 
     // Reconstruct selected-ids into objects
     const all = this.source.reduce((array, optgroup) => [...array, ...optgroup.options], [] as Employee[]);
@@ -122,14 +138,23 @@ export class DualListboxComponent implements OnInit {
     this.selectedChange.emit(selectedOptions);
   }
 
-  private filterAvailable(options: Category[]): Category[] {
+  private filterAvailable(options: Category[], filterValue: string = ''): Category[] {
     // The default is to only show available options when they are not selected
-    const filterer: FilterFn = (option: Employee) => this.selected.indexOf(option.id) < 0;
+    // AND also make sure they match the typed in filter value (if any)
+    const filterer: FilterFn = (option: Employee) => (
+      this.selected.indexOf(option.id) < 0 &&
+      defaultFilter(option, filterValue)
+    );
+
     return this.filterOptions(options, filterer);
   }
 
-  private filterSelected(options: Category[]): Category[] {
-    const filterer: FilterFn = (option: Employee) => this.selected.indexOf(option.id) >= 0;
+  private filterSelected(options: Category[], filterValue: string = ''): Category[] {
+    const filterer: FilterFn = (option: Employee) => (
+      this.selected.indexOf(option.id) >= 0 &&
+      defaultFilter(option, filterValue)
+    );
+
     return this.filterOptions(options, filterer);
   }
 
@@ -137,7 +162,10 @@ export class DualListboxComponent implements OnInit {
     // Filter any children of parent optgroups
     const filtered = groups.map(optgroup => {
       const subFiltered = (optgroup.options || []).filter(subOption => filterer(subOption));
-      const newGroup: Category = { ...optgroup, options: subFiltered };
+      const newGroup: Category = {
+        ...optgroup,
+        options: subFiltered
+      };
       return newGroup;
     });
 
