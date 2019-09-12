@@ -51,14 +51,14 @@ export class DualListboxComponent implements OnInit {
 
   constructor() { }
 
-  // Counts all amployees wihtin a picklist/listbox
+  // Counts all employees within a pick-list/list-box
   count(list: Category[]): number {
     return (this.getFlatOptions(list) || []).length;
   }
 
   ngOnInit() {
-    this.left.items = this.filterAvailable(this.source, this.left.filter);
-    this.right.items = this.filterSelected(this.source, this.right.filter);
+    this.left.items = this.filterAvailable(this.source);
+    this.right.items = this.filterSelected(this.source);
   }
 
   onSelectionChange(list: ListState, selectedValues: number[]) {
@@ -70,12 +70,10 @@ export class DualListboxComponent implements OnInit {
       return;
     }
 
-    // ignore the search filter when moving all items
-    const available = this.filterAvailable(this.source);
     const previouslySelected = this.selected;
     const selected = [
       ...previouslySelected,
-      ...this.getFlatOptions(available)
+      ...this.getFlatOptions(this.left.items)
     ];
     this.onChange(selected);
   }
@@ -115,9 +113,9 @@ export class DualListboxComponent implements OnInit {
   private onChange(selected: number[]) {
     this.selected = [...selected];
 
-    // update listboxes
-    this.left.items = this.filterAvailable(this.source, this.left.filter);
-    this.right.items = this.filterSelected(this.source, this.right.filter);
+    // update list-boxes
+    this.left.items = this.filterAvailable(this.source);
+    this.right.items = this.filterSelected(this.source);
 
     // Reconstruct selected-ids into objects
     const all = this.source.reduce((array, optgroup) => [...array, ...optgroup.employees], [] as Employee[]);
@@ -125,7 +123,7 @@ export class DualListboxComponent implements OnInit {
     this.selectedChange.emit(selectedOptions);
   }
 
-  private filterAvailable(options: Category[], filterValue: string = ''): Category[] {
+  private filterAvailable(options: Category[]): Category[] {
     // The default is to only show available options when they are not selected
     // AND also make sure they match the typed in filter value (if any)
     const filterer: FilterFn = (option: Employee) => this.selected.indexOf(option.id) < 0;
@@ -133,7 +131,7 @@ export class DualListboxComponent implements OnInit {
     return this.filterOptions(options, filterer);
   }
 
-  private filterSelected(options: Category[], filterValue: string = ''): Category[] {
+  private filterSelected(options: Category[]): Category[] {
     const filterer: FilterFn = (option: Employee) => this.selected.indexOf(option.id) >= 0;
 
     return this.filterOptions(options, filterer);
